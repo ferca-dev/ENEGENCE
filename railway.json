@@ -1,0 +1,17 @@
+{
+    "$schema": "https://railway.com/railway.schema.json",
+    "build": {
+        "builder": "DOCKERFILE",
+        "dockerfilePath": "Dockerfile.production"
+    },
+    "deploy": {
+        "preDeployCommand": [
+            "php artisan migrate --force",
+            "php artisan inegi:sync-states"
+        ],
+        "healthcheckPath": "/states",
+        "healthcheckTimeout": 300,
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 3
+    }
+}
