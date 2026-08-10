@@ -39,7 +39,7 @@ if (navbar) {
 const table = document.querySelector('#states-table');
 
 if (table) {
-    const statesPerPage = 15;
+    const statesPerPage = 30;
     const totalStates = table.tBodies[0]?.rows.length ?? 0;
     const lengthMenu = [];
 
@@ -83,6 +83,16 @@ if (table) {
             },
         },
     });
+
+    const tableWrapper = document.querySelector('#states-table_wrapper');
+
+    tableWrapper?.querySelector('.dt-length')
+        ?.closest('.row')
+        ?.classList.add('states-table-toolbar');
+
+    tableWrapper?.querySelector('.dt-info')
+        ?.closest('.row')
+        ?.classList.add('states-table-footer');
 
     table.querySelectorAll('.column-filter').forEach((input, columnIndex) => {
         input.addEventListener('click', (event) => event.stopPropagation());

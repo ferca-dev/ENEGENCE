@@ -19,7 +19,7 @@
         </div>
     </nav>
 
-    <main class="container-fluid py-5">
+    <main class="container-fluid px-0">
         @if ($states->isEmpty())
         <output class="alert alert-info shadow-sm d-block">
             No hay estados disponibles. Ejecuta
