@@ -23,6 +23,10 @@ class StatePagesTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('id="states-table"', false)
+            ->assertSeeText('Prueba técnica - Fernando Cárdenas')
+            ->assertSee('<th scope="col" class="text-center">Clave</th>', false)
+            ->assertSee('<th scope="col" class="text-center"><input class="form-control form-control-sm column-filter text-center"', false)
+            ->assertSee('aria-label="Buscar por viviendas habitadas"', false)
             ->assertSeeTextInOrder(['Aguascalientes', 'Baja California'])
             ->assertSeeText('1,425,607')
             ->assertSeeText('712,803')
@@ -39,6 +43,7 @@ class StatePagesTest extends TestCase
 
         $response
             ->assertOk()
+            ->assertSeeText('Prueba técnica - Fernando Cárdenas')
             ->assertSeeText('Volver a estados')
             ->assertSee('bi-arrow-left', false)
             ->assertSeeText('3 municipios')

@@ -8,9 +8,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-vh-100 bg-body-tertiary text-body">
-        <nav class="navbar sticky-top bg-dark py-3 shadow-sm" data-bs-theme="dark">
+        <nav class="navbar sticky-top bg-dark shadow-sm site-navbar" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand fw-semibold" href="{{ route('states.index') }}">ENEGENCE</a>
+                <a class="navbar-brand site-brand" href="{{ route('states.index') }}">
+                    <span class="site-brand__title">ENEGENCE</span>
+                    <span class="site-brand__subtitle">Prueba técnica - Fernando Cárdenas</span>
+                </a>
                 <a class="btn btn-sm btn-outline-light d-inline-flex align-items-center gap-2" href="{{ route('states.index') }}">
                     <i class="bi bi-arrow-left" aria-hidden="true"></i>
                     <span>Volver a estados</span>

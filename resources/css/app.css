@@ -2,3 +2,76 @@
 @import 'bootstrap-icons/font/bootstrap-icons.min.css';
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
 @import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.css';
+
+:root {
+    --site-navbar-height: 4.5rem;
+}
+
+.site-navbar {
+    padding-block: 1rem;
+    transition: padding 220ms ease;
+}
+
+.site-brand {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    line-height: 1.1;
+    margin-block: 0;
+    padding-block: 0;
+}
+
+.site-brand__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: font-size 220ms ease, letter-spacing 220ms ease;
+}
+
+.site-brand__subtitle {
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.78rem;
+    font-weight: 400;
+    transition: font-size 220ms ease;
+}
+
+.site-navbar.is-compact {
+    padding-block: 0.55rem;
+}
+
+.site-navbar.is-compact .site-brand__title {
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+}
+
+.site-navbar.is-compact .site-brand__subtitle {
+    font-size: 0.68rem;
+}
+
+#states-table thead {
+    position: sticky;
+    top: var(--site-navbar-height);
+    z-index: 1010;
+}
+
+#states-table thead > tr:first-child > th {
+    background-color: var(--bs-light-bg-subtle);
+}
+
+.column-filters th {
+    background-color: var(--bs-tertiary-bg);
+    padding: 0.5rem;
+}
+
+.column-filter {
+    min-width: 4.5rem;
+    width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-navbar,
+    .site-brand__title,
+    .site-brand__subtitle {
+        transition: none;
+    }
+}
