@@ -1,6 +1,6 @@
 DOCKER_COMPOSE := docker compose
 
-.PHONY: init up down artisan composer npm test pint build scan qa logs
+.PHONY: init up down artisan composer npm test pint build scan qa logs vercel-sync-states
 
 init:
 	@test -f .env || cp .env.example .env
@@ -44,3 +44,7 @@ qa: test pint build scan
 
 logs:
 	$(DOCKER_COMPOSE) logs --tail=100 app db
+
+vercel-sync-states:
+	@sync_token="$$(security find-generic-password -a enegence -s com.enegence.inegi-sync-token -w)" && \
+		vercel curl /internal/inegi/sync-states -X POST -H "Authorization: Bearer $${sync_token}"
