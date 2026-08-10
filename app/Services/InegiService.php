@@ -49,7 +49,7 @@ class InegiService
     }
 
     /**
-     * @return list<array{code: string, name: string, total_population: int}>
+     * @return list<array{code: string, name: string, total_population: int|null}>
      */
     public function municipalities(string $stateCode): array
     {
@@ -128,7 +128,7 @@ class InegiService
     }
 
     /**
-     * @return array{code: string, name: string, total_population: int}
+     * @return array{code: string, name: string, total_population: int|null}
      */
     private function mapMunicipality(mixed $item, string $stateCode): array
     {
@@ -153,14 +153,14 @@ class InegiService
             throw new UnexpectedValueException('INEGI devolvió un nombre municipal inválido.');
         }
 
-        if ((! is_string($population) && ! is_int($population)) || ! ctype_digit((string) $population)) {
+        if ($population !== null && ((! is_string($population) && ! is_int($population)) || ! ctype_digit((string) $population))) {
             throw new UnexpectedValueException('INEGI devolvió una población municipal inválida.');
         }
 
         return [
             'code' => $code,
             'name' => trim($name),
-            'total_population' => (int) $population,
+            'total_population' => $population === null ? null : (int) $population,
         ];
     }
 

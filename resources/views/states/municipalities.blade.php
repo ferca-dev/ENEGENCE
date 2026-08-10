@@ -63,7 +63,13 @@
                                         <tr>
                                             <th scope="row"><span class="badge text-bg-light border font-monospace">{{ $municipality['code'] }}</span></th>
                                             <td>{{ $municipality['name'] }}</td>
-                                            <td class="text-end"><span class="fw-semibold font-monospace">{{ number_format($municipality['total_population']) }}</span></td>
+                                            <td class="text-end">
+                                                @if ($municipality['total_population'] === null)
+                                                    <span class="text-secondary">No disponible</span>
+                                                @else
+                                                    <span class="fw-semibold font-monospace">{{ number_format($municipality['total_population']) }}</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -48,6 +48,22 @@ class StatePagesTest extends TestCase
         Http::assertSent(fn ($request): bool => str_ends_with($request->url(), '/mgem/01'));
     }
 
+    public function test_the_municipalities_page_shows_missing_population_as_unavailable(): void
+    {
+        $state = $this->createState('02', 'Baja California', 3769020);
+        $payload = $this->municipalitiesPayload('02');
+        $payload['datos'][0]['cve_mun'] = '007';
+        $payload['datos'][0]['nomgeo'] = 'San Felipe';
+        unset($payload['datos'][0]['pob_total']);
+        Http::fake(['*' => Http::response($payload)]);
+
+        $this->get(route('states.municipalities', $state))
+            ->assertOk()
+            ->assertSeeText('San Felipe')
+            ->assertSeeText('No disponible')
+            ->assertDontSeeText('No fue posible consultar los municipios');
+    }
+
     public function test_a_missing_state_returns_404_without_calling_inegi(): void
     {
         Http::fake();

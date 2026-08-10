@@ -43,6 +43,18 @@ class InegiServiceTest extends TestCase
         Http::assertSent(fn ($request): bool => str_ends_with($request->url(), '/mgem/01'));
     }
 
+    public function test_it_accepts_a_municipality_without_census_population(): void
+    {
+        $payload = $this->municipalitiesPayload('02');
+        unset($payload['datos'][0]['pob_total']);
+        Http::fake(['*' => Http::response($payload)]);
+
+        $municipalities = app(InegiService::class)->municipalities('02');
+
+        $municipality = collect($municipalities)->firstWhere('code', '003');
+        $this->assertNull($municipality['total_population']);
+    }
+
     public function test_it_rejects_a_payload_without_data(): void
     {
         Http::fake(['*' => Http::response(['numReg' => 32])]);

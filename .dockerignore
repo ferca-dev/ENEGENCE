@@ -1,5 +1,7 @@
 .git
+.vercel
 .env
+.env.*
 .phpunit.result.cache
 bootstrap/cache/*.php
 node_modules
@@ -10,3 +12,4 @@ storage/framework/sessions/*
 storage/framework/testing/*
 storage/framework/views/*
 vendor
+.phpunit.cache
