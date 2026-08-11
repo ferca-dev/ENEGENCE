@@ -22,11 +22,21 @@ class StatePagesTest extends TestCase
 
         $response
             ->assertOk()
+            ->assertSee('<title>Estados de México | '.e(config('app.name')).'</title>', false)
+            ->assertSee('<meta name="description" content="Listado de entidades federativas de México obtenido desde INEGI">', false)
             ->assertSee('id="states-table"', false)
             ->assertSeeText('Prueba técnica - Fernando Cárdenas')
+            ->assertSeeText('Datos del Instituto Nacional de Estadística y Geografía')
             ->assertSee('<th scope="col" class="text-center">Clave</th>', false)
+            ->assertSee('<th scope="col" class="text-center">Acciones</th>', false)
             ->assertSee('<th scope="col" class="text-center"><input class="form-control form-control-sm column-filter text-center"', false)
             ->assertSee('aria-label="Buscar por viviendas habitadas"', false)
+            ->assertSee('data-state-details', false)
+            ->assertSee('aria-label="Mostrar municipios de Aguascalientes"', false)
+            ->assertSeeText('Mostrar municipios')
+            ->assertSee('<span class="fw-semibold">Aguascalientes</span>', false)
+            ->assertSee('<span>(Agua)</span>', false)
+            ->assertDontSee('aria-label="Buscar por abreviatura"', false)
             ->assertSeeTextInOrder(['Aguascalientes', 'Baja California'])
             ->assertSeeText('1,425,607')
             ->assertSeeText('712,803')
@@ -34,26 +44,22 @@ class StatePagesTest extends TestCase
             ->assertSee(route('states.municipalities', '01'));
     }
 
-    public function test_the_municipalities_page_shows_the_complete_provider_response(): void
+    public function test_the_municipalities_endpoint_returns_the_complete_provider_response(): void
     {
         $state = $this->createState('01', 'Aguascalientes', 1425607);
         Http::fake(['*' => Http::response($this->municipalitiesPayload())]);
 
-        $response = $this->get(route('states.municipalities', $state));
-
-        $response
+        $this->get(route('states.municipalities', $state))
             ->assertOk()
-            ->assertSeeText('Prueba técnica - Fernando Cárdenas')
-            ->assertSeeText('Volver a estados')
-            ->assertSee('bi-arrow-left', false)
-            ->assertSeeText('3 municipios')
-            ->assertSeeTextInOrder(['001', 'Aguascalientes', '002', 'Asientos', '003', 'Calvillo'])
-            ->assertSeeText('948,990');
+            ->assertJsonCount(3, 'municipalities')
+            ->assertJsonPath('municipalities.0.code', '001')
+            ->assertJsonPath('municipalities.0.name', 'Aguascalientes')
+            ->assertJsonPath('municipalities.0.total_population', 948990);
         $this->assertDatabaseCount('estados', 1);
         Http::assertSent(fn ($request): bool => str_ends_with($request->url(), '/mgem/01'));
     }
 
-    public function test_the_municipalities_page_shows_missing_population_as_unavailable(): void
+    public function test_the_municipalities_endpoint_returns_missing_population_as_null(): void
     {
         $state = $this->createState('02', 'Baja California', 3769020);
         $payload = $this->municipalitiesPayload('02');
@@ -64,9 +70,11 @@ class StatePagesTest extends TestCase
 
         $this->get(route('states.municipalities', $state))
             ->assertOk()
-            ->assertSeeText('San Felipe')
-            ->assertSeeText('No disponible')
-            ->assertDontSeeText('No fue posible consultar los municipios');
+            ->assertJsonFragment([
+                'name' => 'San Felipe',
+                'total_population' => null,
+            ])
+            ->assertJsonMissing(['message' => 'No fue posible consultar los municipios.']);
     }
 
     public function test_a_missing_state_returns_404_without_calling_inegi(): void
@@ -78,26 +86,26 @@ class StatePagesTest extends TestCase
         Http::assertNothingSent();
     }
 
-    public function test_a_provider_error_returns_a_safe_error_page(): void
+    public function test_a_provider_error_returns_a_safe_json_response(): void
     {
         $state = $this->createState('01', 'Aguascalientes', 1425607);
         Http::fake(['*' => Http::response([], 503)]);
 
         $this->get(route('states.municipalities', $state))
             ->assertStatus(502)
-            ->assertSeeText('No fue posible consultar los municipios')
+            ->assertJsonPath('message', 'No fue posible consultar los municipios.')
             ->assertDontSee('gaia.inegi.org.mx')
             ->assertDontSee('RequestException');
     }
 
-    public function test_an_invalid_municipality_payload_returns_the_same_safe_error_page(): void
+    public function test_an_invalid_municipality_payload_returns_the_same_safe_json_response(): void
     {
         $state = $this->createState('01', 'Aguascalientes', 1425607);
         Http::fake(['*' => Http::response(['datos' => [], 'numReg' => 0])]);
 
         $this->get(route('states.municipalities', $state))
             ->assertStatus(502)
-            ->assertSeeText('No fue posible consultar los municipios');
+            ->assertJsonPath('message', 'No fue posible consultar los municipios.');
     }
 
     private function createState(string $code, string $name, int $population): State

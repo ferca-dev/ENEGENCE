@@ -6,7 +6,7 @@ use App\Models\State;
 use App\Services\InegiService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use UnexpectedValueException;
 
@@ -30,24 +30,20 @@ class StateController extends Controller
         return view('states.index', compact('states'));
     }
 
-    public function municipalities(State $state, InegiService $inegi): View|Response
+    public function municipalities(State $state, InegiService $inegi): JsonResponse
     {
         try {
             $municipalities = $inegi->municipalities($state->code);
         } catch (ConnectionException|RequestException|UnexpectedValueException $exception) {
             report($exception);
 
-            return response()->view('states.municipalities', [
-                'state' => $state,
-                'municipalities' => [],
-                'loadError' => true,
+            return response()->json([
+                'message' => 'No fue posible consultar los municipios.',
             ], 502);
         }
 
-        return view('states.municipalities', [
-            'state' => $state,
+        return response()->json([
             'municipalities' => $municipalities,
-            'loadError' => false,
         ]);
     }
 }

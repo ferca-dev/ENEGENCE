@@ -9,8 +9,7 @@
     "dependencies": {
         "bootstrap": "5.3.8",
         "bootstrap-icons": "^1.13.1",
-        "datatables.net-bs5": "^3.0.1",
-        "datatables.net-responsive-bs5": "^4.0.1"
+        "datatables.net-bs5": "^3.0.1"
     },
     "devDependencies": {
         "laravel-vite-plugin": "^3.1",
