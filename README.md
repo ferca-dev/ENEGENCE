@@ -1,20 +1,4 @@
-# Catálogo geográfico de México
-
-Prueba técnica desarrollada con Laravel, MySQL y Bootstrap. Obtiene las 32 entidades federativas desde INEGI, las almacena de forma idempotente y consulta los municipios en vivo al seleccionar un estado.
-
-El desarrollo y las pruebas se ejecutan con Docker Compose. No es necesario instalar PHP, Composer, Node.js ni MySQL en el equipo anfitrión.
-
-## Funcionalidad
-
-- Sincronización de los 32 estados desde `mgee/`, incluyendo abreviatura, población por sexo y viviendas habitadas.
-- Persistencia en la tabla `estados` sin registros duplicados.
-- Listado DataTables con paginación, búsqueda y ordenamiento.
-- Poblaciones formateadas con separadores de miles.
-- Consulta en vivo de municipios mediante `mgem/{CLAVE_ESTADO}`.
-- Respuestas `404` para estados inexistentes y `502` seguro ante fallos de INEGI.
-- Interfaz responsive construida con Bootstrap 5.
-
-## Tecnologías
+## Tecnologías usadas
 
 - Laravel 13 y PHP 8.5.
 - MySQL 8.4.
@@ -64,30 +48,33 @@ Ejemplo: <http://localhost:8000/states/01/municipalities>.
 
 ## Comandos
 
-```bash
-# Levantar o detener la aplicación
-make up
-make dev
-make down
+| Comando | Uso |
+| --- | --- |
+| `make init` | Prepara el proyecto por primera vez: dependencias, clave, base de datos, migraciones y assets. |
+| `make dev` | Levanta Laravel, MySQL y Vite con hot reload. Se mantiene activo en primer plano. |
+| `make up` | Levanta Laravel y MySQL en segundo plano usando los assets compilados. |
+| `make down` | Detiene y elimina los contenedores del proyecto. |
+| `make artisan cmd="..."` | Ejecuta un comando Artisan dentro del contenedor de Laravel. |
+| `make composer cmd="..."` | Ejecuta un comando Composer dentro del contenedor. |
+| `make npm cmd="..."` | Ejecuta un comando npm dentro del contenedor de Node.js. |
+| `make test` | Ejecuta la suite de pruebas automatizadas. |
+| `make pint` | Comprueba el formato PHP con Laravel Pint sin modificar archivos. |
+| `make build` | Genera los assets de producción con Vite. |
+| `make scan` | Busca código de depuración, marcadores pendientes y secretos conocidos. |
+| `make qa` | Ejecuta pruebas, formato, build y escaneo en una sola validación. |
+| `make logs` | Muestra los últimos logs de Laravel, MySQL y Vite. |
+| `make vercel-sync-states` | Ejecuta la sincronización remota en Vercel usando el token guardado en el llavero de macOS. |
 
-# Migraciones y sincronización
+Ejemplos:
+
+```bash
 make artisan cmd="migrate --force"
 make artisan cmd="inegi:sync-states"
-
-# Pruebas y control de calidad
-make test
-make pint
-make build
-make qa
-
-# Otros comandos dentro de los contenedores
-make artisan cmd="about"
 make composer cmd="audit"
 make npm cmd="audit"
-make logs
 ```
 
-`make qa` ejecuta 15 pruebas con peticiones INEGI simuladas, Laravel Pint, la compilación de producción y un escaneo básico de código de depuración, marcadores de trabajo pendiente y secretos conocidos.
+`make qa` ejecuta 22 pruebas con peticiones INEGI simuladas, Laravel Pint, la compilación de producción y un escaneo básico de código de depuración, marcadores de trabajo pendiente y secretos conocidos.
 
 ## Sincronización idempotente
 
@@ -101,9 +88,6 @@ La solución mantiene una estructura MVC pequeña:
 - `InegiService` concentra el cliente HTTP, la validación y el mapeo de estados y municipios.
 - `SyncStates` coordina la carga idempotente.
 - `StateController` atiende el listado y la consulta municipal.
-- Dos vistas Blade presentan estados y municipios.
-
-Los municipios no se persisten porque el ejercicio solicita consultarlos al seleccionar un estado. Tampoco se añadieron autenticación, caché, AJAX ni capas de dominio que no aportan al alcance.
 
 ## Manejo de errores
 
@@ -157,11 +141,8 @@ CACHE_STORE=file
 
 Los valores MySQL usan referencias entre servicios; no deben copiarse al repositorio. Railway detecta la configuración declarativa y utiliza `Dockerfile.production`.
 
-## Demostración de cinco minutos
+## Demostración rápida
 
 1. Ejecutar `make up` y abrir `/states`.
 2. Ejecutar dos veces `make artisan cmd="inegi:sync-states"` y mostrar que permanecen 32 estados.
-3. Demostrar búsqueda, ordenamiento y paginación.
-4. Abrir Aguascalientes y mostrar sus municipios.
-5. Ejecutar `make test`.
-6. Explicar brevemente `State`, `InegiService`, `SyncStates` y `StateController`.
+3. Ejecutar `make test`.

@@ -26,22 +26,33 @@ class StatePagesTest extends TestCase
             ->assertSee('<meta name="description" content="Listado de entidades federativas de México obtenido desde INEGI">', false)
             ->assertSee('id="states-table"', false)
             ->assertSeeText('Prueba técnica - Fernando Cárdenas')
-            ->assertSeeText('Datos del Instituto Nacional de Estadística y Geografía')
             ->assertSee('<th scope="col" class="text-center">Clave</th>', false)
             ->assertSee('<th scope="col" class="text-center">Acciones</th>', false)
             ->assertSee('<th scope="col" class="text-center"><input class="form-control form-control-sm column-filter text-center"', false)
             ->assertSee('aria-label="Buscar por viviendas habitadas"', false)
             ->assertSee('data-state-details', false)
+            ->assertSee('data-state-name="Aguascalientes"', false)
+            ->assertSee('data-details-url="'.route('states.municipalities', '01').'"', false)
             ->assertSee('aria-label="Mostrar municipios de Aguascalientes"', false)
             ->assertSeeText('Mostrar municipios')
             ->assertSee('<span class="fw-semibold">Aguascalientes</span>', false)
             ->assertSee('<span>(Agua)</span>', false)
             ->assertDontSee('aria-label="Buscar por abreviatura"', false)
+            ->assertDontSee('href="'.route('states.municipalities', '01').'"', false)
             ->assertSeeTextInOrder(['Aguascalientes', 'Baja California'])
             ->assertSeeText('1,425,607')
             ->assertSeeText('712,803')
-            ->assertSeeText('356,401')
-            ->assertSee(route('states.municipalities', '01'));
+            ->assertSeeText('356,401');
+    }
+
+    public function test_the_states_page_explains_how_to_load_data_when_it_is_empty(): void
+    {
+        $this->get(route('states.index'))
+            ->assertOk()
+            ->assertSeeText('No hay estados disponibles.')
+            ->assertSeeText('php artisan inegi:sync-states')
+            ->assertSeeText('make vercel-sync-states')
+            ->assertDontSee('id="states-table"', false);
     }
 
     public function test_the_municipalities_endpoint_returns_the_complete_provider_response(): void

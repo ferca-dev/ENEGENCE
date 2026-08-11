@@ -46,7 +46,7 @@ scan:
 qa: test pint build scan
 
 logs:
-	$(DOCKER_COMPOSE) logs --tail=100 app db
+	$(DOCKER_COMPOSE) --profile dev logs --tail=100 app db vite
 
 vercel-sync-states:
 	@sync_token="$$(security find-generic-password -a enegence -s com.enegence.inegi-sync-token -w)" && \
