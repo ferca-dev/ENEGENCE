@@ -13,7 +13,7 @@
             para cargar la información.
         </output>
     @else
-        <div class="container-fluid py-5">
+        <div class="container-fluid py-5 states-page">
             <noscript>
                 <div class="alert alert-warning">
                     La tabla completa está disponible, pero la búsqueda, el orden y la paginación requieren JavaScript.
@@ -23,7 +23,7 @@
             <section class="card mx-auto shadow" aria-labelledby="states-table-title">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="states-table" class="table table-hover align-middle text-nowrap w-100">
+                        <table id="states-table" class="table table-hover align-middle w-100 states-table">
                             <caption class="visually-hidden">Clave, nombre, abreviatura, población y viviendas habitadas de los estados de México</caption>
                             <thead class="table-light">
                                 <tr>
@@ -47,11 +47,38 @@
                             </thead>
                             <tbody>
                                 @foreach ($states as $state)
-                                <tr>
+                                <tr class="state-table__row">
                                     <th scope="row" class="text-center"><span class="badge text-bg-light border font-monospace">{{ $state->code }}</span></th>
-                                    <td>
-                                        <span class="fw-semibold">{{ $state->name }}</span>
-                                        <span>({{ $state->abbreviation ?? '—' }})</span>
+                                    <td
+                                        class="state-table__state"
+                                        data-order="{{ $state->name }}"
+                                        data-search="{{ $state->name }} {{ $state->abbreviation }}">
+                                        <div class="state-table__identity">
+                                            <span class="fw-semibold">{{ $state->name }}</span>
+                                            <span>({{ $state->abbreviation ?? '—' }})</span>
+                                        </div>
+                                        <dl class="state-table__secondary mb-0">
+                                            <div class="state-table__secondary-key">
+                                                <dt>Clave</dt>
+                                                <dd>{{ $state->code }}</dd>
+                                            </div>
+                                            <div class="state-table__secondary-total">
+                                                <dt>Población</dt>
+                                                <dd>{{ number_format($state->total_population) }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Mujeres</dt>
+                                                <dd>{{ $state->female_population === null ? '—' : number_format($state->female_population) }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Hombres</dt>
+                                                <dd>{{ $state->male_population === null ? '—' : number_format($state->male_population) }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Viviendas</dt>
+                                                <dd>{{ $state->inhabited_dwellings === null ? '—' : number_format($state->inhabited_dwellings) }}</dd>
+                                            </div>
+                                        </dl>
                                     </td>
                                     <td class="text-end" data-order="{{ $state->total_population }}">
                                         <span class="fw-semibold font-monospace">{{ number_format($state->total_population) }}</span>
@@ -74,7 +101,9 @@
                                             data-details-url="{{ route('states.municipalities', $state) }}"
                                             aria-expanded="false"
                                             aria-label="Mostrar municipios de {{ $state->name }}">
-                                            Mostrar municipios
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                            <span class="state-action__label">Mostrar municipios</span>
+                                            <span class="state-action__label-compact">Municipios</span>
                                         </button>
                                     </td>
                                 </tr>

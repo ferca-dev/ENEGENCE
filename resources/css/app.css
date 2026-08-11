@@ -152,6 +152,29 @@ body {
     border-color: var(--brand-border);
 }
 
+.states-table > tbody > .state-table__row > :not(.state-table__state),
+.municipality-table > tbody > tr > :first-child,
+.municipality-table > tbody > tr > :last-child {
+    white-space: nowrap;
+}
+
+.state-table__identity {
+    white-space: nowrap;
+}
+
+.state-table__secondary,
+.state-action__label-compact,
+.municipality-table__mobile-code {
+    display: none;
+}
+
+[data-state-details] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+}
+
 .form-control:focus,
 .form-select:focus {
     border-color: var(--brand-blue-light);
@@ -195,6 +218,189 @@ body {
 
 .card.shadow {
     box-shadow: 0 0.75rem 2rem rgba(35, 53, 109, 0.16) !important;
+}
+
+@media (max-width: 1199.98px) {
+    .states-table > colgroup > :nth-child(4),
+    .states-table > colgroup > :nth-child(5),
+    .states-table > colgroup > :nth-child(6),
+    .states-table > thead > tr > :nth-child(4),
+    .states-table > thead > tr > :nth-child(5),
+    .states-table > thead > tr > :nth-child(6),
+    .states-table > tbody > .state-table__row > :nth-child(4),
+    .states-table > tbody > .state-table__row > :nth-child(5),
+    .states-table > tbody > .state-table__row > :nth-child(6) {
+        display: none;
+    }
+
+    .state-table__secondary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.25rem 0.75rem;
+        margin-top: 0.45rem;
+        color: var(--bs-secondary-color);
+        font-size: 0.75rem;
+        line-height: 1.25;
+    }
+
+    .state-table__secondary > div {
+        min-width: 0;
+    }
+
+    .state-table__secondary dt {
+        overflow: hidden;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .state-table__secondary dd {
+        margin-bottom: 0;
+        color: var(--bs-body-color);
+        font-family: var(--bs-font-monospace);
+        white-space: nowrap;
+    }
+
+    .state-table__secondary-key,
+    .state-table__secondary-total {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .states-page {
+        padding-block: 1rem !important;
+        padding-inline: 0.75rem;
+    }
+
+    .states-table > colgroup > :first-child,
+    .states-table > colgroup > :nth-child(3),
+    .states-table > thead > tr > :first-child,
+    .states-table > thead > tr > :nth-child(3),
+    .states-table > tbody > .state-table__row > :first-child,
+    .states-table > tbody > .state-table__row > :nth-child(3) {
+        display: none;
+    }
+
+    .states-table > thead > tr > :nth-child(2),
+    .states-table > tbody > .state-table__row > :nth-child(2) {
+        padding-left: 0.75rem;
+    }
+
+    .states-table > thead > tr > :last-child,
+    .states-table > tbody > .state-table__row > :last-child {
+        width: 1%;
+        padding-right: 0.75rem;
+    }
+
+    .state-table__secondary {
+        grid-template-columns: repeat(2, minmax(4.75rem, 1fr));
+        max-width: 15rem;
+    }
+
+    .state-table__secondary-key,
+    .state-table__secondary-total {
+        display: block;
+    }
+
+    .dt-container > .data-table-toolbar,
+    .dt-container > .data-table-footer {
+        gap: 0.5rem;
+    }
+
+    .dt-container > .data-table-toolbar > [class*="col-"],
+    .dt-container > .data-table-footer > [class*="col-"] {
+        width: 100%;
+        text-align: center !important;
+    }
+
+    .dt-container > .data-table-footer .dt-paging .pagination {
+        flex-wrap: wrap;
+        justify-content: center !important;
+        row-gap: 0.25rem;
+    }
+
+    [data-state-details] {
+        min-width: 6.5rem;
+    }
+
+    .state-action__label {
+        display: none;
+    }
+
+    .state-action__label-compact {
+        display: inline;
+    }
+
+    .dt-container .column-filter {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .site-navbar {
+        padding-block: 0.7rem;
+    }
+
+    .site-brand__title {
+        font-size: 1.1rem;
+    }
+
+    .site-brand__subtitle {
+        font-size: 0.68rem;
+    }
+
+    .states-page {
+        padding-inline: 0.5rem;
+    }
+
+    .states-page .card {
+        border-radius: 0.5rem;
+    }
+
+    .states-table {
+        font-size: 0.875rem;
+    }
+
+    .state-table__identity {
+        white-space: normal;
+    }
+
+    .state-table__secondary {
+        grid-template-columns: repeat(2, minmax(4rem, 1fr));
+        gap: 0.35rem 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    [data-state-details] {
+        min-width: 0;
+        padding-inline: 0.55rem;
+    }
+
+    .dt-container > .data-table-toolbar,
+    .dt-container > .data-table-footer {
+        padding-inline: 0.5rem;
+    }
+
+    .dt-container > .data-table-footer .page-link {
+        padding-inline: 0.4rem;
+    }
+
+    .municipality-table > colgroup > :first-child,
+    .municipality-table > thead > tr > :first-child,
+    .municipality-table > tbody > tr > :first-child {
+        display: none;
+    }
+
+    .municipality-table__mobile-code {
+        display: block;
+        margin-top: 0.15rem;
+        color: var(--bs-secondary-color);
+        font-family: var(--bs-font-monospace);
+        font-size: 0.7rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

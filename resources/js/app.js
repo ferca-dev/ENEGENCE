@@ -124,10 +124,14 @@ if (table) {
     const setActionState = (action, expanded) => {
         const stateName = action.dataset.stateName;
         const actionText = expanded ? 'Ocultar municipios' : 'Mostrar municipios';
+        const compactActionText = expanded ? 'Ocultar' : 'Municipios';
 
         action.setAttribute('aria-expanded', String(expanded));
         action.setAttribute('aria-label', `${actionText} de ${stateName}`);
-        action.textContent = actionText;
+        action.querySelector('.state-action__label').textContent = actionText;
+        action.querySelector('.state-action__label-compact').textContent = compactActionText;
+        action.querySelector('.bi')?.classList.toggle('bi-eye', !expanded);
+        action.querySelector('.bi')?.classList.toggle('bi-eye-slash', expanded);
         action.classList.toggle('btn-primary', expanded);
         action.classList.toggle('btn-outline-primary', !expanded);
     };
@@ -151,7 +155,10 @@ if (table) {
             return `
                 <tr>
                     <th scope="row" class="text-center"><span class="badge text-bg-light border font-monospace">${escapeHtml(municipality.code)}</span></th>
-                    <td>${escapeHtml(municipality.name)}</td>
+                    <td>
+                        <span>${escapeHtml(municipality.name)}</span>
+                        <span class="municipality-table__mobile-code">Clave ${escapeHtml(municipality.code)}</span>
+                    </td>
                     <td class="text-end">${population}</td>
                 </tr>
             `;
@@ -160,7 +167,7 @@ if (table) {
         panel.innerHTML = `
             <div class="bg-body-tertiary p-4">
                 <div class="table-responsive">
-                    <table class="table table-sm table-hover align-middle text-nowrap w-100" aria-label="Municipios de ${stateName}">
+                    <table class="table table-sm table-hover align-middle w-100 municipality-table" aria-label="Municipios de ${stateName}">
                         <thead class="table-light">
                             <tr>
                                 <th scope="col" class="text-center">Clave</th>
