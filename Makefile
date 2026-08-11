@@ -1,6 +1,6 @@
 DOCKER_COMPOSE := docker compose
 
-.PHONY: init up down artisan composer npm test pint build scan qa logs vercel-sync-states
+.PHONY: init up dev down artisan composer npm test pint build scan qa logs vercel-sync-states
 
 init:
 	@test -f .env || cp .env.example .env
@@ -15,6 +15,9 @@ init:
 
 up:
 	$(DOCKER_COMPOSE) up -d app
+
+dev:
+	$(DOCKER_COMPOSE) --profile dev up app vite
 
 down:
 	$(DOCKER_COMPOSE) down

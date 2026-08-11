@@ -37,7 +37,7 @@ if (table) {
         info: `Mostrando _START_ a _END_ de _TOTAL_ ${items}${infoSuffix}`,
         infoEmpty: `No hay ${items} para mostrar${infoSuffix}`,
         infoFiltered: `(filtrados de _MAX_ ${items} totales)`,
-        lengthMenu: `Mostrar _MENU_ ${items}`,
+        lengthMenu: `Mostrar _MENU_ ${items}${infoSuffix}`,
         zeroRecords: `No se encontraron ${items}`,
         paginate: {
             first: '<i class="bi bi-chevron-bar-left" aria-hidden="true"></i><span class="visually-hidden">Primera página</span>',
@@ -159,9 +159,6 @@ if (table) {
 
         panel.innerHTML = `
             <div class="bg-body-tertiary p-4">
-                <div class="d-flex justify-content-end mb-3">
-                    <span class="badge rounded-pill text-bg-primary">${municipalities.length} municipios</span>
-                </div>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover align-middle text-nowrap w-100" aria-label="Municipios de ${stateName}">
                         <thead class="table-light">

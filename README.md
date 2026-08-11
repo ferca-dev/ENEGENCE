@@ -42,6 +42,16 @@ make artisan cmd="inegi:sync-states"
 
 La aplicación queda disponible en <http://localhost:8000>.
 
+## Desarrollo con recarga automática
+
+Para levantar Laravel y Vite con hot reload:
+
+```bash
+make dev
+```
+
+Mientras el comando permanezca activo, los cambios en Blade, CSS y JavaScript se reflejan automáticamente en el navegador. `make up` continúa disponible cuando se prefieran los assets compilados de `public/build`.
+
 ## Rutas
 
 | Ruta | Descripción |
@@ -57,6 +67,7 @@ Ejemplo: <http://localhost:8000/states/01/municipalities>.
 ```bash
 # Levantar o detener la aplicación
 make up
+make dev
 make down
 
 # Migraciones y sincronización
